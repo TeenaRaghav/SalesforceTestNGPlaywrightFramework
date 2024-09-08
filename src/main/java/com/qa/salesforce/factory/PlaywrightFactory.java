@@ -1,15 +1,19 @@
 package com.qa.salesforce.factory;
 
 import com.microsoft.playwright.Browser;
+import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.BrowserType.LaunchOptions;
+import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 
 public class PlaywrightFactory {
 	Playwright playwright;
 	Browser browser;
+	BrowserContext browserCntx;
+	Page page;
 
-	public void initBrowser(String browserName) {
+	public Page initBrowser(String browserName) {
 		System.out.println("Browser name is :" + browserName);
 		Playwright.create();
 		
@@ -27,8 +31,14 @@ public class PlaywrightFactory {
 			browser = playwright.chromium().launch(new LaunchOptions().setChannel("chrome").setHeadless(false));
 			break;
 		default:
+			System.out.println("plaease pass the right browser name.....");
 			break;
 		}
+		
+		browserCntx = browser.newContext();
+		page = browserCntx.newPage();
+		page.navigate("https://login.salesforce.com/");
+		return page;
 	}
 
 }
